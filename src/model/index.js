@@ -1,0 +1,1 @@
+module.exports.Pendulum = require('./pendulum.model');
