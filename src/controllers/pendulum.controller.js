@@ -3,6 +3,7 @@ const catchAsync = require('../utils/catchAsync');
 const httpStatus = require('http-status');
 const config = require('../config/config');
 const logger = require('../config/logger');
+const { client } = require('../redis');
 
 const getCoordinates = catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send(`Currently pinging instance: ${config.instance}`);
@@ -13,6 +14,8 @@ const configurePendulum = catchAsync(async (req, res) => {
     const pendulum = { initialOffset, mass, stringLength, maximumWindFactor };
 
     logger.info(`Pendulum Received: ${JSON.stringify(pendulum)}`);
+    client.set('pendulum', JSON.stringify(pendulum));
+    logger.info('Successfully added pendulum config to redis');
     res.status(httpStatus.OK).send(pendulum);
 });
 
