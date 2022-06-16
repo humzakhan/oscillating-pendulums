@@ -24,8 +24,14 @@ const getPendulumConfig = catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send(pendulumConfig);
 });
 
+const getCurrentPosition = catchAsync(async (req, res) => {
+    const position = await pendulumService.getCurrentPosition();
+    res.status(httpStatus.OK).send(position);
+});
+
 module.exports = {
     getInstanceInformation,
     configurePendulum,
-    getPendulumConfig
+    getPendulumConfig,
+    getCurrentPosition
 };

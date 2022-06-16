@@ -12,5 +12,8 @@ router
     .get(pendulumController.getPendulumConfig)
     .post(validate(pendulumValidator.pendulumConfig), pendulumController.configurePendulum);
 
+router
+    .route('/position')
+    .get(pendulumController.getCurrentPosition);
 
 module.exports = router;

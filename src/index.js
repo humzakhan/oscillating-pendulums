@@ -8,6 +8,7 @@ let server = app.listen(config.port, async () => {
     logger.info(`Listening on port: ${config.port}`);
     await client.connect();
     await pendulumService.addDefaultPendulumConfig();
+    await pendulumService.addInitialParameters();
 });
 
 const exitHandler = () => {
