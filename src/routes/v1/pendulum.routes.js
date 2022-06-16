@@ -6,6 +6,11 @@ const pendulumController = require('../../controllers/pendulum.controller');
 const router = express.Router();
 
 router.get('/instance', pendulumController.getInstanceInformation);
-router.post('/config', validate(pendulumValidator.pendulumConfig), pendulumController.configurePendulum);
+
+router
+    .route('/config')
+    .get(pendulumController.getPendulumConfig)
+    .post(validate(pendulumValidator.pendulumConfig), pendulumController.configurePendulum);
+
 
 module.exports = router;

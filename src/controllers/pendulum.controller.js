@@ -11,15 +11,21 @@ const getInstanceInformation = catchAsync(async (req, res) => {
 });
 
 const configurePendulum = catchAsync(async (req, res) => {
-    const pendulum = req.body;
+    const pendulumConfig = req.body;
 
-    logger.info(`Pendulum Received: ${JSON.stringify(pendulum)}`);
-    await pendulumService.addPendulumConfig(pendulum);
+    logger.info(`Pendulum Received: ${JSON.stringify(pendulumConfig)}`);
+    await pendulumService.addPendulumConfig(pendulumConfig);
 
-    res.status(httpStatus.OK).send(pendulum);
+    res.status(httpStatus.OK).send(pendulumConfig);
+});
+
+const getPendulumConfig = catchAsync(async (req, res) => {
+    const pendulumConfig = await pendulumService.getPendulumConfig();
+    res.status(httpStatus.OK).send(pendulumConfig);
 });
 
 module.exports = {
     getInstanceInformation,
-    configurePendulum
+    configurePendulum,
+    getPendulumConfig
 };
