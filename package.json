@@ -11,7 +11,7 @@
     "instance-three": "PORT=3003 INSTANCE_NEIGHBOR=3004 pm2 start ./src/index.js --name \"instance-3003\"",
     "instance-four": "PORT=3004 INSTANCE_NEIGHBOR=3005 pm2 start ./src/index.js --name \"instance-3004\"",
     "instance-five": "PORT=3005 INSTANCE_NEIGHBOR=3004 pm2 start ./src/index.js --name \"instance-3005\"",
-    "sandbox": "PORT=3000 INSTANCE_NEIGHBOR=3001 pm2 start ./src/index.js --name \"instance-sandbox\"",
+    "sandbox": "PORT=3000 INSTANCE_NEIGHBOR=3001 pm2 start ./src/index.js --name \"instance-sandbox\" --watch",
     "run:all": "npm run instance-one && npm run instance-two && npm run instance-three && npm run instance-four && npm run instance-five",
     "stop:all": "pm2 stop all"
   },

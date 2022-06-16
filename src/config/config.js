@@ -24,6 +24,10 @@ const constructKey = (key) => {
     return `instance-${envVars.PORT}-${key}`;
 }
 
+const constructNeighborKey = (key) => {
+    return `instance-${envVars.INSTANCE_NEIGHBOR}-${key}`;
+}
+
 module.exports = {
     env: envVars.NODE_ENV,
     port: envVars.PORT,
@@ -31,5 +35,6 @@ module.exports = {
     redisHost: envVars.REDIS_HOST,
     redisPort: envVars.REDIS_PORT,
     redisPassword: envVars.REDIS_PASSWORD,
-    constructKey: constructKey
+    constructKey,
+    constructNeighborKey
 };
