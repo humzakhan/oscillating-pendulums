@@ -4,22 +4,22 @@ const httpStatus = require('http-status');
 const config = require('../config/config');
 const logger = require('../config/logger');
 const { client } = require('../redis');
+const { pendulumService } = require('../services');
 
-const getCoordinates = catchAsync(async (req, res) => {
-    res.status(httpStatus.OK).send(`Currently pinging instance: ${config.instance}`);
+const getInstanceInformation = catchAsync(async (req, res) => {
+    res.status(httpStatus.OK).send(`Currently pinging instance: ${config.port}`);
 });
 
 const configurePendulum = catchAsync(async (req, res) => {
-    const { initialOffset, mass, stringLength, maximumWindFactor } = req.body;
-    const pendulum = { initialOffset, mass, stringLength, maximumWindFactor };
+    const pendulum = req.body;
 
     logger.info(`Pendulum Received: ${JSON.stringify(pendulum)}`);
-    client.set('pendulum', JSON.stringify(pendulum));
-    logger.info('Successfully added pendulum config to redis');
+    await pendulumService.addPendulumConfig(pendulum);
+
     res.status(httpStatus.OK).send(pendulum);
 });
 
 module.exports = {
-    getCoordinates,
+    getInstanceInformation,
     configurePendulum
 };

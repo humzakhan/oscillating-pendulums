@@ -5,10 +5,7 @@ const pendulumController = require('../../controllers/pendulum.controller');
 
 const router = express.Router();
 
-router
-    .route('/')
-    .get(pendulumController.getCoordinates);
-
+router.get('/instance', pendulumController.getInstanceInformation);
 router.post('/config', validate(pendulumValidator.pendulumConfig), pendulumController.configurePendulum);
 
 module.exports = router;

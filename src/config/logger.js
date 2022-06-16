@@ -19,6 +19,7 @@ const logger = winston.createLogger({
   transports: [
     new winston.transports.Console({
       stderrLevels: ['error'],
+      label: `[Instance ${config.port}] -`
     }),
   ],
 });

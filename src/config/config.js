@@ -20,11 +20,16 @@ if (error) {
     throw new Error(`An error occurred when validating config values: ${error.message}`);
 }
 
+const constructKey = (key) => {
+    return `instance-${envVars.PORT}-${key}`;
+}
+
 module.exports = {
     env: envVars.NODE_ENV,
     port: envVars.PORT,
     instance: envVars.INSTANCE,
     redisHost: envVars.REDIS_HOST,
     redisPort: envVars.REDIS_PORT,
-    redisPassword: envVars.REDIS_PASSWORD
+    redisPassword: envVars.REDIS_PASSWORD,
+    constructKey: constructKey
 };
