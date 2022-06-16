@@ -2,10 +2,12 @@ const app = require('./app');
 const logger = require('./config/logger');
 const config = require('./config/config');
 const { client } = require('./redis');
+const { pendulumService } = require('./services');
 
 let server = app.listen(config.port, async () => {
     logger.info(`Listening on port: ${config.port}`);
     await client.connect();
+    await pendulumService.addDefaultPendulumConfig();
 });
 
 const exitHandler = () => {

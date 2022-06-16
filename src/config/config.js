@@ -7,7 +7,7 @@ const envVarsSchema = Joi.object()
     .keys({
         NODE_ENV: Joi.string().valid('production', 'test', 'development').required(),
         PORT: Joi.number().default(3000),
-        INSTANCE: Joi.string().valid('one', 'two', 'three', 'four', 'five').required(),
+        INSTANCE_NEIGHBOR: Joi.number(),
         REDIS_HOST: Joi.string().default('localhost'),
         REDIS_PORT: Joi.number().default(6379),
         REDIS_PASSWORD: Joi.string().required()
@@ -27,7 +27,7 @@ const constructKey = (key) => {
 module.exports = {
     env: envVars.NODE_ENV,
     port: envVars.PORT,
-    instance: envVars.INSTANCE,
+    instanceNeighbor: envVars.INSTANCE_NEIGHBOR,
     redisHost: envVars.REDIS_HOST,
     redisPort: envVars.REDIS_PORT,
     redisPassword: envVars.REDIS_PASSWORD,

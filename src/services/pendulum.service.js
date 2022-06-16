@@ -8,6 +8,19 @@ const addPendulumConfig = async(pendulum) => {
     logger.info(`Successfully added pendulum for key: [${key}] value: [${JSON.stringify(pendulum)}]`);
 };
 
+const addDefaultPendulumConfig = async() => {
+    const pendulum = {
+        "initialOffset": 10,
+        "mass": 20,
+        "stringLength": 15,
+        "maximumWindFactor": 5
+    };
+
+    await addPendulumConfig(pendulum);
+    logger.info('Adding default pendulum config.');
+};
+
 module.exports = {
-    addPendulumConfig
+    addPendulumConfig,
+    addDefaultPendulumConfig
 }
