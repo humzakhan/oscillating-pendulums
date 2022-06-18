@@ -23,9 +23,9 @@ const getPendulumConfig = async() => {
 
 const addDefaultPendulumConfig = async() => {
     const pendulumConfig = {
-        initialOffset: 10,
+        initialOffset: 0,
         mass: 50,
-        stringLength: 400,
+        stringLength: 250,
         maximumWindFactor: 5
     };
 
