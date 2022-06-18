@@ -17,7 +17,8 @@ const getPendulumConfig = async() => {
 
     if (pendulumConfig == null || pendulumConfig == '')
         return {};
-    
+
+    logger.info(`Returning config: ${JSON.stringify(pendulumConfig)}`);
     return JSON.parse(pendulumConfig);
 };
 

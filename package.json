@@ -6,11 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "docker": "docker-compose --env-file .env -f ./docker/docker-compose.yml up",
-    "instance-one": "PORT=3001 INSTANCE_NEIGHBOR=3002 pm2 start ./src/index.js --name \"instance-3001\"",
-    "instance-two": "PORT=3002 INSTANCE_NEIGHBOR=3003 pm2 start ./src/index.js --name \"instance-3002\"",
-    "instance-three": "PORT=3003 INSTANCE_NEIGHBOR=3004 pm2 start ./src/index.js --name \"instance-3003\"",
-    "instance-four": "PORT=3004 INSTANCE_NEIGHBOR=3005 pm2 start ./src/index.js --name \"instance-3004\"",
-    "instance-five": "PORT=3005 INSTANCE_NEIGHBOR=3004 pm2 start ./src/index.js --name \"instance-3005\"",
+    "instance-one": "PORT=3001 INSTANCE_NEIGHBOR=3002 pm2 start ./src/index.js --name \"instance-3001\" --watch",
+    "instance-two": "PORT=3002 INSTANCE_NEIGHBOR=3003 pm2 start ./src/index.js --name \"instance-3002\" --watch",
+    "instance-three": "PORT=3003 INSTANCE_NEIGHBOR=3004 pm2 start ./src/index.js --name \"instance-3003\" --watch",
+    "instance-four": "PORT=3004 INSTANCE_NEIGHBOR=3005 pm2 start ./src/index.js --name \"instance-3004\" --watch",
+    "instance-five": "PORT=3005 INSTANCE_NEIGHBOR=3004 pm2 start ./src/index.js --name \"instance-3005\" --watch",
     "sandbox": "PORT=3000 INSTANCE_NEIGHBOR=3001 pm2 start ./src/index.js --name \"instance-sandbox\" --watch",
     "run:all": "npm run instance-one && npm run instance-two && npm run instance-three && npm run instance-four && npm run instance-five",
     "stop:all": "pm2 stop all"
