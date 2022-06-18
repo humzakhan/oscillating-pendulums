@@ -1,0 +1,91 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+html {
+    display: flex;
+}
+
+body {
+  background: white;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  display: flex;
+  color: #373737;
+  text-align: left;
+  overflow-x: hidden;
+  margin: auto;
+  width: 100%;
+}
+
+main {
+  width: 100%;
+  text-align:center;
+}
+
+canvas{
+  z-index: 4;
+  margin-top: 50px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+.container {
+  position: absolute;
+  top: 47%;
+  width: 100%;
+}
+
+.wrapper {
+  width: 1280px;
+  margin: 0 auto;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn {
+  padding: 8px 30px;
+  border: 1px solid #ddd;
+}
+
+.btn-controls {
+  padding: 10px 50px;
+  border-radius: 5px;
+  text-transform: uppercase;
+  background-color: #ffd98d;
+}
+
+.btn-controls:hover {
+  cursor: pointer;
+}
+
+.config {
+  margin-top: 60px;
+  text-align: center;
+}
+
+.config-inputs {
+  background: #eee;
+  width: 400px;
+  margin: 0 auto;
+  padding: 40px;
+  border-radius: 20px;
+}
+
+.form-group {
+  display: block;
+  padding-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+

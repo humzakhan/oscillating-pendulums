@@ -1,0 +1,277 @@
+var p1, p2, p3, p4, p6;
+var canvasWidth = 1280;
+var instances = {};
+var maxInstances = 5;
+var startingInstance = 1;
+
+var elements = {
+  lengthSliderValue: "length-slider-value",
+  lengthSlider: "length-slider",
+  massSliderValue: "mass-slider-value",
+  massSlider: "mass-slider",
+  offsetSliderValue: "offset-slider-value",
+  offsetSlider: "offset-slider",
+  pendulumEdited: "pendulum-edited",
+  pendulumIndex: "pendulum-index",
+  globalStart: "global-start",
+  globalStop: "global-stop",
+  globalRestart: "global-restart"
+};
+
+window.onload = function() {
+  disableConfigControls(true);
+};
+
+async function loadInitialConfig() {
+  var configs = {};
+
+  for(let index = startingInstance; index <= maxInstances; index++) {
+    const response = await axios.get(`${this.getHostUrlForPendulum(index)}/pendulum/config`);
+    configs[index] = { 
+      mass: response.data.mass,
+      length: response.data.stringLength,
+      angle: response.data.initialOffset  
+    };
+  }
+
+  return configs;
+}
+
+function triggerAllInstances() {
+  for(var i = 1; i <= maxInstances; i++) {
+    instances[i].angle = Math.PI / 4;
+    instances[i].go();
+  }
+}
+
+function stopAllInstances() {
+  for(var i = 1; i <= maxInstances; i++) {
+    instances[i].angle = 0;
+    instances[i].go();
+  }
+}
+
+function updateStateValues(id) {
+  var state = id.split('-')[1];
+  var currentConfig = getStateConfig();
+  var updatedValue = (!currentConfig[state]).toString();
+
+  document.getElementById(`global-${state}`).value = updatedValue;
+  triggerStateOperation(state, updatedValue);
+}
+
+function triggerStateOperation(state, value) {
+  switch(state) {
+    case "start":
+    case "restart":
+      triggerAllInstances();
+    break;
+
+    case "stop":
+      stopAllInstances();
+      break;
+  }
+}
+
+function getStateConfig() {
+  return {
+    start: document.getElementById(elements.globalStart).value == 'true',
+    stop: document.getElementById(elements.globalStop).value == 'true',
+    restart: document.getElementById(elements.globalRestart).value == 'true',
+  };
+}
+
+function getCurrentConfigValues() {
+  return {
+    length: document.getElementById(elements.lengthSliderValue).value,
+    mass: document.getElementById(elements.massSliderValue).value,
+    offset: document.getElementById(elements.offsetSliderValue).value
+  };
+}
+
+function computeInstancesGap() {
+  return (canvasWidth / maxInstances) - 50;
+}
+
+function onSaveChangesClicked() {
+  disableConfigControls(true);
+  document.getElementById(elements.pendulumEdited).innerText = "none";
+
+  updateActivePendulumInstance();
+  persistConfigForActivePendulum();
+}
+
+function disableConfigControls(value) {
+  var childNodes = document.getElementById("config-editor").getElementsByTagName('*');
+  for (var node of childNodes) {
+      node.disabled = value;
+  }
+}
+
+function updateConfigPendulumTitle(index) {
+  document.getElementById(elements.pendulumEdited).innerText = `Instance #${index}`;
+  document.getElementById(elements.pendulumIndex).value = index;
+}
+
+function displayCurrentConfig(config) {
+  document.getElementById(elements.lengthSliderValue).value = config.length;
+  document.getElementById(elements.massSliderValue).value = config.mass;
+  document.getElementById(elements.offsetSliderValue).value = config.offset;
+
+  document.getElementById(elements.lengthSlider).value = config.length;
+  document.getElementById(elements.massSlider).value = config.mass;
+  document.getElementById(elements.offsetSlider).value = config.offset;
+}
+
+
+function getActivePendulumIndex() {
+  return Number(document.getElementById(elements.pendulumIndex).value);
+}
+
+function onValueChange(id, value) {
+  document.getElementById(`${id}-value`).innerText = value;
+
+  updateActivePendulumInstance();
+}
+
+function updateActivePendulumInstance() {
+  var activeIndex = getActivePendulumIndex();
+  var config = getCurrentConfigValues();
+
+  var gap = computeInstancesGap();
+  console.log(config);
+  instances[activeIndex] = new Pendulum(createVector(gap * activeIndex), config.length, config.mass, activeIndex, config.offset);
+  instances[activeIndex].update();
+}
+
+function getHostUrlForPendulum(index) {
+  return `http://localhost:${3000 + index}/v1`;
+};
+
+async function persistConfigForActivePendulum() {
+  const config = getCurrentConfigValues();
+  const activeIndex = getActivePendulumIndex();
+
+  const payload = {
+    initialOffset: config.offset,
+    mass: config.mass,
+    stringLength: config.length,
+    maximumWindFactor: 5
+  };
+
+  const response = await axios.post(`${getHostUrlForPendulum(activeIndex)}/pendulum/config`, payload);
+  console.log(response.data);
+}
+
+function setup()  {
+  createCanvas(1280,480);
+  var gap = computeInstancesGap();
+  loadInitialConfig()
+  .then(configs => {
+    for(var i = startingInstance; i <= maxInstances; i++) {
+      instances[i] = new Pendulum(createVector(gap * i), configs[i].length, configs[i].mass, i, configs[i].angle);
+    }
+
+    render();
+  });
+}
+
+function render() {
+  background(51);
+
+  for(var i = 1; i <= maxInstances; i++) {
+    if (instances[i] != null)
+      instances[i].go();
+  }
+}
+
+function draw() {
+  render();
+}
+
+function mousePressed() {
+  for(var i = 1; i <= maxInstances; i++) {
+    instances[i].clicked(mouseX,mouseY);
+  }
+}
+
+function mouseReleased() {
+  for(var i = 1; i <= maxInstances; i++) {
+    instances[i].stopDragging();
+  }
+}
+
+function Pendulum(origin_, length, mass, instance, angle) {
+  this.origin = origin_.copy();
+  this.position = createVector();
+  this.length = length;
+  this.mass = mass;
+  this.angle = angle;
+  this.color = color;
+  this.instance = parseInt(instance);
+  this.config = {
+    mass: this.mass,
+    length: this.length,
+    offset: this.angle
+  }
+
+  this.aVelocity = 0.0;
+  this.aAcceleration = 0.0;
+  this.damping = 0.995; 
+  this.ballr = mass;
+  
+  this.dragging = false;
+
+  this.go = function() {
+    this.update();
+    this.display();
+    this.drag();
+  };
+
+  this.update = function() {
+    var gravity = 0.1 * 9.8;                                               
+    this.aAcceleration = (-1 * gravity / this.length) * sin(this.angle);  
+    this.aVelocity += this.aAcceleration;                            
+    this.aVelocity *= this.damping;                                  
+    this.angle += this.aVelocity;                                   
+  };
+
+  this.drag = function () {
+    if (this.dragging) {
+        var diff = p5.Vector.sub(this.origin, createVector(mouseX, mouseY));      
+        this.angle = atan2(-1 * diff.y, diff.x) - radians(90);                  
+    }
+  };
+
+  this.stopDragging = function () {
+    this.aVelocity = 0; 
+    this.dragging = false;
+  };
+
+  this.clicked = function (mx, my) {
+    var d = dist(mx, my, this.position.x, this.position.y);
+    if (d < this.ballr) {
+        disableConfigControls(false);
+        updateConfigPendulumTitle(this.instance);
+        displayCurrentConfig(this.config);
+        this.dragging = true;
+    }
+  };
+
+  this.display = function() {
+    this.position.set(this.length * sin(this.angle), this.length * cos(this.angle), 0);         
+    this.position.add(this.origin);                                               
+
+    stroke(255);
+    strokeWeight(2);
+    line(this.origin.x, this.origin.y, this.position.x, this.position.y);
+    ellipseMode(CENTER);
+    fill('#9b9888');
+
+    if (this.dragging) {
+      fill('#c66a0d');
+    }
+    
+    ellipse(this.position.x, this.position.y, this.ballr, this.ballr);
+  };
+}
