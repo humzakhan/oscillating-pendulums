@@ -23,13 +23,7 @@ const getPendulumConfig = async() => {
 };
 
 const addDefaultPendulumConfig = async() => {
-    const pendulumConfig = {
-        initialOffset: 0,
-        mass: 50,
-        stringLength: 250,
-        maximumWindFactor: 5,
-        color: '#9b9888'
-    };
+    const pendulumConfig = getInitialConfigForInstances(configKey);
 
     await addPendulumConfig(pendulumConfig);
 };
@@ -97,6 +91,48 @@ const computeCurrentPosition = async() => {
 
     return position;
 };
+
+const getInitialConfigForInstances = (key) => {
+    const defaultConfig = {
+        "instance-3001-config": {
+            initialOffset: -0.60,
+            mass: 51,
+            stringLength: 250,
+            maximumWindFactor: 5,
+            color: '#4272c6'
+        },
+        "instance-3002-config": {
+            initialOffset: 0.29,
+            mass: 32,
+            stringLength: 375,
+            maximumWindFactor: 5,
+            color: '#ed7e32'
+        },
+        "instance-3003-config": {
+            initialOffset: -0.65,
+            mass: 60,
+            stringLength: 175,
+            maximumWindFactor: 5,
+            color: '#ffc006'
+        },
+        "instance-3004-config": {
+            initialOffset: 0.33,
+            mass: 79,
+            stringLength: 289,
+            maximumWindFactor: 5,
+            color: '#6fac47'
+        },
+        "instance-3005-config": {
+            initialOffset: -0.09,
+            mass: 47,
+            stringLength: 436,
+            maximumWindFactor: 5,
+            color: '#5b9ad8'
+        }
+    };
+
+    return defaultConfig[key];
+}
 
 module.exports = {
     addPendulumConfig,

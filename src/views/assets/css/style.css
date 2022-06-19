@@ -14,7 +14,7 @@ body {
   font-size: 14px;
   font-weight: 400;
   display: flex;
-  color: #373737;
+  color: #333;
   text-align: left;
   overflow-x: hidden;
   margin: auto;
@@ -31,6 +31,7 @@ canvas{
   margin-top: 50px;
   cursor: pointer;
   border-radius: 20px;
+  border: 2px solid #eee;
 }
 
 .container {
@@ -71,11 +72,12 @@ canvas{
 }
 
 .config-inputs {
-  background: #eee;
+  background: #f2f2f3;
   width: 400px;
   margin: 0 auto;
   padding: 40px;
   border-radius: 20px;
+  border: 2px solid #eee;
 }
 
 .form-group {
