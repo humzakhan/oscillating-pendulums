@@ -11,8 +11,9 @@
     "instance-three": "PORT=3003 INSTANCE_NEIGHBOR=3004 pm2 start ./src/index.js --name \"instance-3003\"",
     "instance-four": "PORT=3004 INSTANCE_NEIGHBOR=3005 pm2 start ./src/index.js --name \"instance-3004\"",
     "instance-five": "PORT=3005 INSTANCE_NEIGHBOR=3004 pm2 start ./src/index.js --name \"instance-3005\"",
-    "sandbox": "PORT=3000 INSTANCE_NEIGHBOR=3001 pm2 start ./src/index.js --name \"instance-sandbox\" --watch",
-    "run:all": "npm run instance-one && npm run instance-two && npm run instance-three && npm run instance-four && npm run instance-five",
+    "sandbox": "PORT=3000 INSTANCE_NEIGHBOR=3001 pm2 start ./src/index.js --name \"instance-sandbox\"",
+    "websockets": "pm2 start ./src/websockets.js --name \"websockets\"",
+    "run:all": "npm run websockets && npm run instance-one && npm run instance-two && npm run instance-three && npm run instance-four && npm run instance-five",
     "stop:all": "pm2 stop all"
   },
   "author": "Humza Khan",
@@ -27,7 +28,8 @@
     "joi": "^17.6.0",
     "path": "^0.12.7",
     "redis": "^4.1.0",
-    "winston": "^3.7.2"
+    "winston": "^3.7.2",
+    "ws": "^8.8.0"
   },
   "devDependencies": {
     "pm2": "^5.2.0"

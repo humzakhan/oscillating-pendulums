@@ -15,8 +15,6 @@ const exitHandler = () => {
     if (server) {
         server.close(async () => {
             logger.info(`Closing instance on port: ${config.port}`);
-            await client.close();
-            
             process.exit();
         });
     }

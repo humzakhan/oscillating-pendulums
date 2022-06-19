@@ -27,8 +27,32 @@ var elements = {
 window.onload = function() {
   disableConfigControls(true);
 
-  setInterval(persistPositions, 1000);
+   var ws = new WebSocket("ws://localhost:8080/ws"); 
+
+   ws.onopen = function(event) {
+    console.log('Connected to the WebSockets server');
+   };
+
+   ws.onmessage = function (event) {
+      const message = JSON.parse(event.data);
+      processStateSignal(message);
+   };
+
+  setInterval(persistPositions, 500);
 };
+
+function processStateSignal(message) {
+  if (message.state == "STOP" && playAnimation) {
+    playAnimation = false;
+
+    alert(`Imminent Collision between instances: ${message.instance} and ${message.neighbor}. Stopping the animation.`);
+  }
+
+  if (message.state == "RESTART") {
+    setup();
+    triggerAllInstances();
+  }
+}
 
 async function loadInitialConfig() {
   var configs = {};
@@ -82,10 +106,7 @@ function persistPositions() {
         .post(`${getHostUrlForPendulum(index)}/pendulum/position`, payload)
         .catch(err => console.error(`Failed to save position for instance: ${index} error: ${err}`));
     }
-  
-    console.log("Saved positions for all pendulums");
   }
-  else console.log("nothing to save", playAnimation);
 }
 
 function triggerStateOperation(state, value) {
@@ -144,12 +165,10 @@ function disableConfigControls(value) {
 }
 
 function updateConfigPendulumTitle(index) {
-  const color = document.getElementById(elements.colorValue).value;
-
   document.getElementById(elements.pendulumEdited).innerText = `Instance #${index}`;
   document.getElementById(elements.pendulumIndex).value = index;
-  document.getElementById(elements.pendulumEdited).style.color = color;
-  document.getElementById(elements.configInputs).style.borderColor = color;
+
+  updateActiveColor();
 }
 
 function displayCurrentConfig(config) {
@@ -169,9 +188,16 @@ function getActivePendulumIndex() {
   return Number(document.getElementById(elements.pendulumIndex).value);
 }
 
+function updateActiveColor() {
+  const color = document.getElementById(elements.colorValue).value;
+  document.getElementById(elements.pendulumEdited).style.color = color;
+  document.getElementById(elements.configInputs).style.borderColor = color;
+}
+
 function onValueChange(id, value) {
   document.getElementById(`${id}-value`).innerText = value;
 
+  updateActiveColor();
   updateActivePendulumInstance();
 }
 
@@ -304,7 +330,6 @@ function Pendulum(origin_, length, mass, instance, angle, color, position) {
         var diff = p5.Vector.sub(this.origin, createVector(mouseX, mouseY));      
         this.angle = atan2(-1 * diff.y, diff.x) - radians(90);    
         displayPendulumAngle(this.angle);
-        console.log(this.instance, this.position.x, this.position.y);
     }
   };
 

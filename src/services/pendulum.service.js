@@ -1,5 +1,6 @@
 const config = require('../config/config');
 const logger = require('../config/logger');
+const collisionService = require('./collision.service');
 const { client } = require('../redis');
 
 const configKey = config.constructKey('config');
@@ -23,6 +24,7 @@ const getPendulumConfig = async() => {
 };
 
 const addDefaultPendulumConfig = async() => {
+    console.log(configKey);
     const pendulumConfig = getInitialConfigForInstances(configKey);
 
     await addPendulumConfig(pendulumConfig);
@@ -74,6 +76,7 @@ const updatePosition = async(position) => {
     await client.set(positionKey, JSON.stringify(position));
 
     logger.info(`Successfully saved position: ${JSON.stringify(position)}`);
+    collisionService.detectCollision();
     return await getCurrentPosition();
 }
 
@@ -94,8 +97,15 @@ const computeCurrentPosition = async() => {
 
 const getInitialConfigForInstances = (key) => {
     const defaultConfig = {
-        "instance-3001-config": {
+        "instance-3000-config": {
             initialOffset: -0.60,
+            mass: 51,
+            stringLength: 250,
+            maximumWindFactor: 5,
+            color: '#4272c6'
+        },
+        "instance-3001-config": {
+            initialOffset: -0.36,
             mass: 51,
             stringLength: 250,
             maximumWindFactor: 5,
