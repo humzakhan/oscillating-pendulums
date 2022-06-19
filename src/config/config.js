@@ -10,7 +10,9 @@ const envVarsSchema = Joi.object()
         INSTANCE_NEIGHBOR: Joi.number(),
         REDIS_HOST: Joi.string().default('localhost'),
         REDIS_PORT: Joi.number().default(6379),
-        REDIS_PASSWORD: Joi.string().required()
+        REDIS_PASSWORD: Joi.string().required(),
+        WSB_HOST: Joi.string().required().default("localhost"),
+        WSB_PORT: Joi.number().required().default(8080),
     })
     .unknown();
 
@@ -35,6 +37,8 @@ module.exports = {
     redisHost: envVars.REDIS_HOST,
     redisPort: envVars.REDIS_PORT,
     redisPassword: envVars.REDIS_PASSWORD,
+    wsbHost: envVars.WSB_HOST,
+    wsbPort: envVars.WSB_PORT,
     constructKey,
     constructNeighborKey
 };

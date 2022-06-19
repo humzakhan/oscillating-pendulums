@@ -1,5 +1,6 @@
 const express = require('express');
 const logger = require('./config/logger');
+const config = require('./config/config');
 const WebSocket = require('ws');
 
 const app = express();
@@ -34,8 +35,8 @@ const websockets = async (expressServer) => {
     return websocketServer;
 };
 
-let server = app.listen(8080, async () => {
-    logger.info(`WSB started on port 8080`);
+let server = app.listen(config.wsbPort, async () => {
+    logger.info(`WSB started on port ${config.wsbPort}`);
 });
 
 websockets(server);

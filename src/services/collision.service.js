@@ -5,7 +5,7 @@ const WebSocket = require('ws');
 
 const positionKey = config.constructKey('position');
 const neighborPositionKey = config.constructNeighborKey('position');
-const ws = new WebSocket("ws://localhost:8080/ws");
+const ws = new WebSocket(`ws://${config.wsbHost}:${config.wsbPort}/ws`);
 
 const getNeighborPosition = async() => {
     const position = JSON.parse(await client.get(neighborPositionKey));
@@ -24,13 +24,8 @@ const detectCollision = async() => {
         logger.info(`Neighbor Position: ${JSON.stringify(neighborPosition)}`);
         logger.info(`Distance, x: ${diffX}, y: ${diffY}`);
 
-        const message = {
-            instance: config.port,
-            neighbor: config.instanceNeighbor,
-            state: "STOP"
-        };
-
-        ws.send(JSON.stringify(message));
+        publishSignal("STOP");
+        logger.info('Published STOP signal to all instances');
 
         logger.info('Publishing RESTART signal in 5 seconds');
         setTimeout(publishRestartSignal, 5000);
@@ -38,15 +33,19 @@ const detectCollision = async() => {
 }
 
 const publishRestartSignal = () => {
+    publishSignal("RESTART");
+    logger.info("RESTART signal published");
+};
+
+const publishSignal = (state) => {
     const message = {
         instance: config.port,
         neighbor: config.instanceNeighbor,
-        state: "RESTART"
+        state: state
     };
 
     ws.send(JSON.stringify(message));
-    logger.info("RESTART signal published");
-};
+}
 
 module.exports = {
     detectCollision,
