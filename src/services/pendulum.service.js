@@ -27,7 +27,8 @@ const addDefaultPendulumConfig = async() => {
         initialOffset: 0,
         mass: 50,
         stringLength: 250,
-        maximumWindFactor: 5
+        maximumWindFactor: 5,
+        color: '#9b9888'
     };
 
     await addPendulumConfig(pendulumConfig);

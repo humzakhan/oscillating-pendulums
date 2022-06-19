@@ -46,6 +46,12 @@
                         </div>
 
                         <div class="form-group">
+                            <label>Display Color</label>
+                            <input id="color" type="color"  oninput="onValueChange(this.id, this.value)" value="#9b9888">
+                            <output id="color-value" style="display: block; margin-top: 5px;">#9b9888</output>
+                        </div>
+
+                        <div class="form-group">
                             <button class="btn btn-controls" style="margin-top: 10px;" onclick="onSaveChangesClicked();">Save Changes</button>
                         </div>
                     </div>

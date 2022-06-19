@@ -11,6 +11,8 @@ var elements = {
   massSlider: "mass-slider",
   offsetSliderValue: "offset-slider-value",
   offsetSlider: "offset-slider",
+  color: "color",
+  colorValue: "color-value",
   pendulumEdited: "pendulum-edited",
   pendulumIndex: "pendulum-index",
   globalStart: "global-start",
@@ -30,7 +32,8 @@ async function loadInitialConfig() {
     configs[index] = { 
       mass: response.data.mass,
       length: response.data.stringLength,
-      angle: response.data.initialOffset  
+      angle: response.data.initialOffset,
+      color: response.data.color  
     };
   }
 
@@ -85,7 +88,8 @@ function getCurrentConfigValues() {
   return {
     length: document.getElementById(elements.lengthSliderValue).value,
     mass: document.getElementById(elements.massSliderValue).value,
-    offset: document.getElementById(elements.offsetSliderValue).value
+    offset: document.getElementById(elements.offsetSliderValue).value,
+    color: document.getElementById(elements.color).value
   };
 }
 
@@ -117,10 +121,12 @@ function displayCurrentConfig(config) {
   document.getElementById(elements.lengthSliderValue).value = config.length;
   document.getElementById(elements.massSliderValue).value = config.mass;
   document.getElementById(elements.offsetSliderValue).value = config.offset;
+  document.getElementById(elements.colorValue).value = config.color;
 
   document.getElementById(elements.lengthSlider).value = config.length;
   document.getElementById(elements.massSlider).value = config.mass;
   document.getElementById(elements.offsetSlider).value = config.offset;
+  document.getElementById(elements.color).value = config.color;
 }
 
 
@@ -140,7 +146,7 @@ function updateActivePendulumInstance() {
 
   var gap = computeInstancesGap();
   console.log(config);
-  instances[activeIndex] = new Pendulum(createVector(gap * activeIndex), config.length, config.mass, activeIndex, config.offset);
+  instances[activeIndex] = new Pendulum(createVector(gap * activeIndex), config.length, config.mass, activeIndex, config.offset, config.color);
   instances[activeIndex].update();
 }
 
@@ -156,7 +162,8 @@ async function persistConfigForActivePendulum() {
     initialOffset: config.offset,
     mass: config.mass,
     stringLength: config.length,
-    maximumWindFactor: 5
+    maximumWindFactor: 5,
+    color: config.color
   };
 
   const response = await axios.post(`${getHostUrlForPendulum(activeIndex)}/pendulum/config`, payload);
@@ -169,7 +176,7 @@ function setup()  {
   loadInitialConfig()
   .then(configs => {
     for(var i = startingInstance; i <= maxInstances; i++) {
-      instances[i] = new Pendulum(createVector(gap * i), configs[i].length, configs[i].mass, i, configs[i].angle);
+      instances[i] = new Pendulum(createVector(gap * i), configs[i].length, configs[i].mass, i, configs[i].angle, configs[i].color);
     }
 
     render();
@@ -201,18 +208,19 @@ function mouseReleased() {
   }
 }
 
-function Pendulum(origin_, length, mass, instance, angle) {
+function Pendulum(origin_, length, mass, instance, angle, color) {
   this.origin = origin_.copy();
   this.position = createVector();
   this.length = length;
   this.mass = mass;
   this.angle = angle;
-  this.color = color;
+  this.color = color ? color : "#9b9888";
   this.instance = parseInt(instance);
   this.config = {
     mass: this.mass,
     length: this.length,
-    offset: this.angle
+    offset: this.angle,
+    color: this.color
   }
 
   this.aVelocity = 0.0;
@@ -266,7 +274,7 @@ function Pendulum(origin_, length, mass, instance, angle) {
     strokeWeight(2);
     line(this.origin.x, this.origin.y, this.position.x, this.position.y);
     ellipseMode(CENTER);
-    fill('#9b9888');
+    fill(this.color);
 
     if (this.dragging) {
       fill('#c66a0d');
