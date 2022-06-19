@@ -69,6 +69,21 @@ const updatePendulumParameters = async () => {
 }
 
 const getCurrentPosition = async() => {
+    const position = JSON.parse(await client.get(positionKey));
+    logger.info(`Retuning position: [${JSON.stringify(position)}]`);
+
+    return position;
+};
+
+const updatePosition = async(position) => {
+    logger.info(`Adding position for instance: ${configKey}`);
+    await client.set(positionKey, JSON.stringify(position));
+
+    logger.info(`Successfully saved position: ${JSON.stringify(position)}`);
+    return await getCurrentPosition();
+}
+
+const computeCurrentPosition = async() => {
     await updatePendulumParameters();
     const currentParams = await getCurrentParamaters();
     const currentConfig = await getPendulumConfig();
@@ -79,9 +94,6 @@ const getCurrentPosition = async() => {
         y: currentConfig.stringLength * Math.cos(currentParams.angle),
         ...currentParams
     };
-
-    await client.set(positionKey, JSON.stringify(position));
-    logger.info(`Retuning position: [${JSON.stringify(position)}]`);
 
     return position;
 };
@@ -94,4 +106,5 @@ module.exports = {
     getCurrentPosition,
     getCurrentParamaters,
     getPendulumConfig,
+    updatePosition
 }

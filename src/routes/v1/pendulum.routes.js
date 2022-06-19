@@ -14,6 +14,7 @@ router
 
 router
     .route('/position')
-    .get(pendulumController.getCurrentPosition);
+    .get(pendulumController.getCurrentPosition)
+    .post(pendulumController.updatePosition);
 
 module.exports = router;

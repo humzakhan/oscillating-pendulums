@@ -1,4 +1,3 @@
-const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const httpStatus = require('http-status');
 const config = require('../config/config');
@@ -29,9 +28,17 @@ const getCurrentPosition = catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send(position);
 });
 
+const updatePosition = catchAsync(async (req, res) => {
+    const position = req.body;
+    const response = await pendulumService.updatePosition(position);
+
+    res.status(httpStatus.CREATED).send(response);
+});
+
 module.exports = {
     getInstanceInformation,
     configurePendulum,
     getPendulumConfig,
-    getCurrentPosition
+    getCurrentPosition,
+    updatePosition
 };
