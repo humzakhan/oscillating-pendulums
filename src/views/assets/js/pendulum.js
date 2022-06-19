@@ -117,11 +117,13 @@ function triggerStateOperation(state, value) {
 
     case "stop":
       stopAllInstances();
+      disableConfigControls(true);
       break;
 
     case "restart":
       setup();
       triggerAllInstances();
+      disableConfigControls(true);
       break;
   }
 }
@@ -149,10 +151,6 @@ function computeInstancesGap() {
 
 function onSaveChangesClicked() {
   disableConfigControls(true);
-  document.getElementById(elements.pendulumEdited).innerText = "none";
-  document.getElementById(elements.pendulumEdited).style.color = "#333"
-  document.getElementById(elements.configInputs).style.borderColor = "#eee";
-
   updateActivePendulumInstance();
   persistConfigForActivePendulum();
 }
@@ -162,6 +160,10 @@ function disableConfigControls(value) {
   for (var node of childNodes) {
       node.disabled = value;
   }
+
+  document.getElementById(elements.pendulumEdited).innerText = "none";
+  document.getElementById(elements.pendulumEdited).style.color = "#333"
+  document.getElementById(elements.configInputs).style.borderColor = "#eee";
 }
 
 function updateConfigPendulumTitle(index) {
