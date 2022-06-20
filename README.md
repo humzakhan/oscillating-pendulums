@@ -61,15 +61,15 @@ A few video demos of this application:
 
 ## Start, Stop, Restart
 
-![Start, Stop, Restart](./docs/assets/start-stop-restart.mp4)
+[YouTube - Start, Stop, Restart](https://www.youtube.com/watch?v=DXhJdve8tIE)
 
 ## Edit Pendulum Configuration
 
-![How to configure](./docs/assets/edit-pendulum.mp4)
+[YouTube - How to configure](https://www.youtube.com/watch?v=4sJz6qw2xVs)
 
 ## Collision Detection
 
-![how to configure](./docs/assets/collision-detection.mp4)
+[YouTube - Collision Detection](https://www.youtube.com/watch?v=I5AjZCsSpPY)
 
 # Architecture
 
@@ -147,6 +147,10 @@ Whenever position for a single pendulum instance is received, we compute the dif
 If the difference is less than a specific threshold, a `STOP` signal is issued via WebSockets and broadcasted to all clients. The frontend, being one of the clients, receives the messsage and immediately stops the animation.
 
 Using `setTimeout`, a `RESTART` signal is scheduled simultaneously that is also received by all the clients. Upon receiving it, the frontend resets the animation to its initial stage.
+
+For a collision to happen, the pendulums need to be in close proximity with respect to both their `x` and `y` axis. If a pendulum simply touches or comes in close proximity to the string of another pendulum, it is not considered a collision by design.
+
+![Valid Collision](./docs/assets//collision.png)
 
 # Factors that can be improved
 
