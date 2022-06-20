@@ -106,10 +106,10 @@ Here is a sample command used to start a single instance:
 
 ### Tracking Position & Configuration
 
-The API implements a REST interface that is used to track information about the pendulum. Every `500ms`, the position `(x,y)` of each pendulum instance is sent to the respective pendulum instance using a `POST` request to the following endpoint:
+The API implements a REST interface that is used to track information about the pendulum. Every `500ms`, the position `(x,y)` of each pendulum instance is sent to the respective pendulum instance using a `PUT` request to the following endpoint:
 
 ```
-POST http://localhost:<instance-port>/v1/pendulum/position
+PUT http://localhost:<instance-port>/v1/pendulum/position
 ```
 
 Upon receiving the request, the instance persists the information in Redis using a key specific to that instance. 
@@ -142,7 +142,7 @@ The configuration of a pendulum can be retrieved at any time using the following
 GET http://localhost:<instance-port>/v1/pendulum/config
 ```
 
-Configuration for any pendulum can be added as well using the same endpoint with `POST` http method.
+Configuration for any pendulum can be added as well using the same endpoint with `PUT` http method.
 
 In order to view complete documentation of the REST API, kindly visit the swagger documentation:
 
