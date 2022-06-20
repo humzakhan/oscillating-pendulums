@@ -2,6 +2,12 @@
 
 This codebase represents a simple pendulum animation, backed by N number of Node/Express instances that actively track the movements, store the underlying configuration, and implement collision detection between pendulums.
 
+## Documentation
+
+You can view the REST API documentation by visiting the following URL:
+
+[https://humzakhan.github.io/simple-pendulum-docs/](https://humzakhan.github.io/simple-pendulum-docs/)
+
 ## How to run 
 
 You will need the following installed and accessible via your `PATH` variable globally:
@@ -138,7 +144,9 @@ GET http://localhost:<instance-port>/v1/pendulum/config
 
 Configuration for any pendulum can be added as well using the same endpoint with `POST` http method.
 
-In order to view complete documentation of the REST API, please refer to this document.
+In order to view complete documentation of the REST API, kindly visit the swagger documentation:
+
+[https://humzakhan.github.io/simple-pendulum-docs/](https://humzakhan.github.io/simple-pendulum-docs/)
 
 ### Collision Detection 
 
