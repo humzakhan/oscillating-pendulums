@@ -176,4 +176,4 @@ There was plenty of time to execute on the assignment from Vention's side, but d
 
 6. Implement auto-save when editing pendulum and eliminate **Save Changes** button.
 
-7. Abstract all functionality of Data Access Layer behind a generic interface. Remove direct references to Redis client in the code and use a generic interface in order to access/store pendulum's config/position. 
+7. Currently the redis client is access directly by the pendulum service. Redis being our persistence layer, should be abstracted behind a service representing our data access layer. This allows the service to be oblivious of the implementation of our DAL, but simply communicate with it by respecting the contract. 
