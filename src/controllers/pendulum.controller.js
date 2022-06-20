@@ -15,7 +15,7 @@ const configurePendulum = catchAsync(async (req, res) => {
     logger.info(`Pendulum Received: ${JSON.stringify(pendulumConfig)}`);
     await pendulumService.addPendulumConfig(pendulumConfig);
 
-    res.status(httpStatus.OK).send(pendulumConfig);
+    res.status(httpStatus.CREATED).send(pendulumConfig);
 });
 
 const getPendulumConfig = catchAsync(async (req, res) => {

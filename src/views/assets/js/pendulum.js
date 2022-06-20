@@ -103,7 +103,7 @@ function persistPositions() {
       const payload = instancePositions[index];
   
       axios
-        .post(`${getHostUrlForPendulum(index)}/pendulum/position`, payload)
+        .put(`${getHostUrlForPendulum(index)}/pendulum/position`, payload)
         .catch(err => console.error(`Failed to save position for instance: ${index} error: ${err}`));
     }
   }
@@ -233,7 +233,7 @@ async function persistConfigForActivePendulum() {
     color: config.color
   };
 
-  const response = await axios.post(`${getHostUrlForPendulum(activeIndex)}/pendulum/config`, payload);
+  const response = await axios.put(`${getHostUrlForPendulum(activeIndex)}/pendulum/config`, payload);
 }
 
 function setup()  {

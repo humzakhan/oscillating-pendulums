@@ -10,11 +10,11 @@ router.get('/instance', pendulumController.getInstanceInformation);
 router
     .route('/config')
     .get(pendulumController.getPendulumConfig)
-    .post(validate(pendulumValidator.pendulumConfig), pendulumController.configurePendulum);
+    .put(validate(pendulumValidator.pendulumConfig), pendulumController.configurePendulum);
 
 router
     .route('/position')
     .get(pendulumController.getCurrentPosition)
-    .post(pendulumController.updatePosition);
+    .put(pendulumController.updatePosition);
 
 module.exports = router;

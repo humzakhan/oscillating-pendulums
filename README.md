@@ -78,7 +78,7 @@ A few video demos of this application:
 3. Redis is used to persist the configuration of the pendulums, and also track their positions. 
 4. The frontend uses plain JavaScript and CSS, along with libraries: `p5.js`, `sketch.js` and `axios` to render the pendulum and make HTTP requests. 
 5. WebSockets are used to implement a communication relay channel between the REST API and frontend. As of now, this is used to communicate collision detection to frontend, and all other instances.
-6. The REST APIs do not implement any authentication mechanism **on purpose** because the entire application is running locally now.
+6. The REST APIs do not implement any authentication mechanism **on purpose** because the entire application is running locally as of now.
 
 ### Pendulum Instances
 
@@ -154,7 +154,7 @@ For a collision to happen, the pendulums need to be in close proximity with resp
 
 # Factors that can be improved
 
-There was plenty of time to execute on the assignment, but due to time constraints on my end, I could not introduce certain practices that I would normally do. These are highlighted here.
+There was plenty of time to execute on the assignment from Vention's side, but due to time constraints on my end, I could not introduce certain practices that I would normally do. These are highlighted here.
 
 1. Specify collision threshold for each pendulum instance via the `.env` file, rather than hard coding it. 
 
